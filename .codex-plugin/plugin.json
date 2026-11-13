@@ -1,41 +1,43 @@
 {
-  "name": "rider-skills",
+  "name": "webstorm-skills",
   "version": "0.1.0",
-  "description": "JetBrains Rider agent skills for semantic refactoring, debugger-driven runtime analysis, C# test discovery, and Unreal Engine C++ authoring, testing, and live debugging.",
+  "description": "JetBrains WebStorm agent skills for JavaScript/TypeScript project execution, refactoring, navigation, debugging, diagnostics, and testing.",
   "author": {
-    "name": "JetBrains",
-    "url": "https://www.jetbrains.com/rider/"
+    "name": "jonelleamio",
+    "url": "https://github.com/jonelleamio"
   },
-  "homepage": "https://github.com/JetBrains/rider-skills",
-  "repository": "https://github.com/JetBrains/rider-skills",
+  "homepage": "https://github.com/jonelleamio/webstorm-skills",
+  "repository": "https://github.com/jonelleamio/webstorm-skills",
   "license": "Apache-2.0",
   "keywords": [
-    "rider",
+    "webstorm",
     "jetbrains",
-    "ide",
+    "javascript",
+    "typescript",
+    "frontend",
     "refactoring",
     "debugging",
-    "test-discovery",
-    "unreal-engine",
+    "testing",
     "mcp"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Rider Skills",
-    "shortDescription": "Rider refactoring, debugging, test discovery, and Unreal Engine C++ skills",
-    "longDescription": "Use Rider Skills to guide agents toward JetBrains Rider MCP workflows for semantic refactoring, debugger-driven root-cause analysis, C# test discovery, and Unreal Engine C++ authoring, testing, and live debugging across Rider-supported projects.",
-    "developerName": "JetBrains",
+    "displayName": "WebStorm Skills",
+    "shortDescription": "WebStorm skills for JavaScript and TypeScript",
+    "longDescription": "Use WebStorm Skills to discover and run project configurations, build JavaScript and TypeScript projects, refactor symbols, navigate code, debug runtime behavior, inspect IDE diagnostics, discover tests, and author tests across frontend projects.",
+    "developerName": "jonelleamio",
     "category": "Coding",
     "capabilities": [
       "Interactive",
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/JetBrains/rider-skills",
+    "websiteURL": "https://github.com/jonelleamio/webstorm-skills",
     "defaultPrompt": [
-      "Refactor this code symbol using Rider.",
-      "Debug this runtime failure in Rider.",
-      "Find existing tests for this C# method."
+      "Run this project's development server or build script in WebStorm.",
+      "Refactor this TypeScript symbol in WebStorm.",
+      "Find existing tests for this JavaScript module.",
+      "Debug this Node.js or browser runtime issue in WebStorm."
     ]
   }
 }

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Check that every skill's metadata.json records the skill's current content.
 
-The hash is BundledSkillDirectoryHash, the value RiderMirrorSkillsTest checks when the
-skills are imported into the Rider monorepo: SHA-256 over the skill's files sorted by
-ordinal relative path, the root metadata.json excluded; each entry is the UTF-8 path,
-a zero byte, and the SHA-256 of the file bytes.
+The hash is SHA-256 over the skill's files sorted by ordinal relative path, with the
+root metadata.json excluded; each entry is the UTF-8 path, a zero byte, and the
+SHA-256 of the file bytes.
 
 With --base-ref, a skill whose content changed since that commit must also raise its
 version, so installed clients pick up the change.
@@ -35,7 +34,7 @@ def skill_files(skill: Path) -> list[str]:
 
 def directory_hash(skill: Path) -> str:
     digest = hashlib.sha256()
-    # Ordinal order compares UTF-16 code units, as .NET does.
+    # UTF-16 ordinal order keeps the path ordering deterministic across hosts.
     for path in sorted(skill_files(skill), key=lambda p: p.encode("utf-16-be")):
         digest.update(path.encode("utf-8") + b"\0")
         digest.update(hashlib.sha256((skill / path).read_bytes()).digest())

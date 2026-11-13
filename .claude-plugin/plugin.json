@@ -1,21 +1,22 @@
 {
-  "name": "rider-skills",
+  "name": "webstorm-skills",
   "version": "0.1.0",
-  "description": "JetBrains Rider agent skills for semantic refactoring, debugger-driven runtime analysis, C# test discovery, and Unreal Engine C++ authoring, testing, and live debugging.",
+  "description": "JetBrains WebStorm agent skills for JavaScript/TypeScript project execution, refactoring, navigation, debugging, diagnostics, and testing.",
   "author": {
-    "name": "JetBrains"
+    "name": "jonelleamio"
   },
-  "homepage": "https://github.com/JetBrains/rider-skills",
-  "repository": "https://github.com/JetBrains/rider-skills",
+  "homepage": "https://github.com/jonelleamio/webstorm-skills",
+  "repository": "https://github.com/jonelleamio/webstorm-skills",
   "license": "Apache-2.0",
   "keywords": [
-    "rider",
+    "webstorm",
     "jetbrains",
-    "ide",
+    "javascript",
+    "typescript",
+    "frontend",
     "refactoring",
     "debugging",
-    "test-discovery",
-    "unreal-engine",
+    "testing",
     "mcp"
   ]
 }

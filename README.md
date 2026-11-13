@@ -1,95 +1,76 @@
-[![official JetBrains project](https://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+# WebStorm Skills
 
-# Rider Skills
-
-A set of [Agent Skills](https://agentskills.io/) that give coding agents **IDE-grade code intelligence inside JetBrains Rider**. Instead of falling back to text edits, `grep`, and print debugging, these skills drive Rider's refactoring engine, debugger, code coverage data, and static analysis through the **Rider MCP server** — so a rename updates every resolved reference, a breakpoint inspects real runtime state, existing tests are located precisely, and diagnostics catch errors before a full build.
+A suite of [Agent Skills](https://agentskills.io/) for WebStorm and the JavaScript/TypeScript ecosystem. These skills guide coding agents through project execution, semantic navigation and refactoring, Node/browser debugging, frontend diagnostics, and JavaScript test discovery and authoring.
 
 ## What's included
 
-Three skills work across every Rider-supported language, one locates existing C# tests, and three are focused on Unreal Engine C++.
-
-### General — any Rider solution
-
 | Skill | Purpose |
 | --- | --- |
-| [`refactoring-code`](skills/refactoring-code/SKILL.md) | Semantic refactoring — rename, move types/namespaces, safe-delete, extract interface/base class/method, change signatures — resolved through the IDE's reference index instead of grep + text replace. |
-| [`debugging-code`](skills/debugging-code/SKILL.md) | Debugger-driven runtime root-cause analysis — set breakpoints and tracepoints, step, inspect frame values, and evaluate expressions to answer questions static reading can't. |
-| [`navigating-code`](skills/navigating-code/SKILL.md) | Semantic code navigation — find all usages of a symbol and all implementations of an interface, class or virtual member through the IDE reference index instead of grep. |
-
-All three cover .NET/C#, F#, VB, C++, Unity, Unreal Engine, XAML, Razor, and other mixed-language projects.
-
-### C#/.NET
-
-| Skill | Purpose |
-| --- | --- |
-| [`finding-tests`](skills/finding-tests/SKILL.md) | Locate existing tests for a C# class or method using Rider's test coverage data before adding or editing tests. |
-
-### Unreal Engine C++ — requires a `.uproject`
-
-| Skill | Purpose |
-| --- | --- |
-| [`ue-code-authoring`](skills/ue-code-authoring/SKILL.md) | Write and modify UE C++ (classes, actors, components, subsystems, interfaces, function libraries) with IDE diagnostics catching UHT/reflection errors and missing module deps before a build. |
-| [`ue-live-debugging`](skills/ue-live-debugging/SKILL.md) | Root-cause UE C++ crashes, runtime bugs, and unexpected behavior — call-hierarchy tracing, live breakpoints, crash-log triage, and live PIE state inspection via Python. |
-| [`ue-test-authoring`](skills/ue-test-authoring/SKILL.md) | Author UE automated tests (Automation, CQTest, Functional, Gauntlet, LowLevel) with IDE checks for registration errors, wrong `RunTest` return types, and missing includes. |
+| [`running-js-projects`](skills/running-js-projects/SKILL.md) | Discover and run project scripts, WebStorm run configurations, and supported builds without assuming a package manager or command. |
+| [`refactoring-code`](skills/refactoring-code/SKILL.md) | Refactor TypeScript/JavaScript symbols, modules, and framework code with WebStorm's semantic refactoring engine; use IDE actions for operations not exposed through MCP. |
+| [`navigating-code`](skills/navigating-code/SKILL.md) | Find symbol usages and implementations, trace barrel exports, and inspect external `.d.ts` definitions. |
+| [`debugging-code`](skills/debugging-code/SKILL.md) | Investigate runtime behavior in Node.js, Vitest/Jest, and JavaScript Debug configurations for Chrome/Chromium. |
+| [`discovering-tests`](skills/discovering-tests/SKILL.md) | Locate unit, integration, and E2E tests using IDE search and JavaScript ecosystem conventions. |
+| [`ts-eslint-diagnostics`](skills/ts-eslint-diagnostics/SKILL.md) | Use configured TypeScript and linter diagnostics for fast feedback before full builds. |
+| [`frontend-framework-ops`](skills/frontend-framework-ops/SKILL.md) | Handle multi-file React, Vue, Angular, Svelte, CSS Modules, Tailwind, and barrel-export changes safely. |
+| [`js-test-authoring`](skills/js-test-authoring/SKILL.md) | Author Vitest, Jest, or Playwright tests using the project's real types, fixtures, and mocks. |
 
 ## How it works
 
-Each skill's `SKILL.md` teaches the workflow, decision points, and guardrails; where needed, `reference/` files hold detailed tool contracts and patterns. At runtime a skill:
+Each `SKILL.md` contains concise triggers, decision gates, workflows, and anti-patterns. Detailed tool contracts and framework-specific edge cases live in `reference/` files and are loaded as needed.
 
-1. **Checks for the Rider MCP tools** in the session's deferred-tool list and loads their live schemas — the schemas are authoritative for parameter names, never guessed.
-2. **Uses Rider's semantic engine** (ReSharper / IDE index) for anything grep can't resolve: cross-language usages, generated/reflected UE code, `nameof`, XAML `x:Name`, `<see cref>`, and more.
-3. **Degrades gracefully.** When the Rider MCP server isn't connected, the skill states the blocker and falls back to standard file/`grep` tools, documenting which IDE-backed quality steps were skipped.
+At runtime, skills resolve JetBrains IDE tools from the names and descriptions exposed in the current session, then inspect live parameter schemas. They do not assume a fixed MCP server prefix or that the direct tool list is complete: WebStorm can make tools router-only, available through its universal `execute_tool` router. If an operation is absent from the direct list, check whether a router is available and use it only with its live schema and verified operation details. If neither route provides the operation, use the appropriate WebStorm UI or fall back to `rg` and standard file tools; report which IDE-backed checks were skipped. Reference tables describe documented or previously observed interfaces, not guarantees about every WebStorm version or MCP session.
 
-## Requirements
+## Requirements and setup
 
-- **JetBrains Rider** with its MCP server enabled and the target solution open.
-- **A coding agent that supports Agent Skills and MCP** (e.g. Claude Code).
-- **For the UE skills:** an Unreal Engine C++ project — a `.uproject` must be in the working directory.
+- **JetBrains WebStorm** with the target JavaScript/TypeScript project open.
+- **IDE as MCP Server** enabled in WebStorm. In its settings, review the project access prompt before enabling the server.
+- An agent that supports Agent Skills and MCP.
+
+Configure the agent as an external MCP client in the MCP Server settings. Use **Auto-Configure** when available, or copy the appropriate manual transport configuration into the client's settings, then restart the client. In **Exposed Tools**, confirm the needed tools are enabled; router-only tools require the client to expose the universal router. See the [official WebStorm MCP Server setup](https://www.jetbrains.com/help/webstorm/mcp-server.html).
+
+Start the agent from the project directory opened in WebStorm so IDE indexing, language services, and run configurations refer to the same project.
 
 ## Install
 
-### 1. Connect the Rider MCP server
-
-In Rider, open **Settings → AI → IDE as MCP Server**, enable the server, and click **Auto-Configure** for your client (Claude Code, Codex, etc.) — Rider registers itself with the agent, no commands needed. Then run the agent from inside the solution folder Rider has open.
-
-### 2. Install the skills
-
-**Claude Code**
+### Claude Code
 
 ```text
-/plugin marketplace add JetBrains/rider-skills
-/plugin install rider-skills@rider-skills
+/plugin marketplace add jonelleamio/webstorm-skills
+/plugin install webstorm-skills@webstorm-skills
 /reload-plugins
 ```
 
-**Codex**
+### Codex
 
 ```bash
-codex plugin marketplace add JetBrains/rider-skills
+codex plugin marketplace add jonelleamio/webstorm-skills
 ```
 
-Then run `/plugins` inside Codex and install **Rider Skills** from the browser.
+Then run `/plugins` in Codex and install **WebStorm Skills** from the marketplace browser.
 
-**Manual**
+### Manual
 
-For agents without plugin support, copy or symlink individual skill folders from `skills/` into `~/.claude/skills/` (all projects) or `<project>/.claude/skills/` (one project).
+For agents without plugin support, copy or symlink individual folders from `skills/` into `~/.claude/skills/` or `<project>/.claude/skills/`.
 
 ## Repository layout
 
 | Path | Contents |
 | --- | --- |
-| `skills/` | All skills, one folder each. |
-| `skills/<skill>/SKILL.md` | Skill definition — frontmatter (name, description, allowed tools) and workflow. |
-| `skills/<skill>/reference/` | Progressive-disclosure reference: tool contracts, patterns, conventions loaded on demand. |
-| `skills/<skill>/metadata.json` | Skill version and a hash of the skill's files. |
-| `.claude-plugin/` | Claude Code plugin (`plugin.json`) and marketplace (`marketplace.json`) metadata. |
-| `.codex-plugin/` | Codex plugin metadata (`plugin.json`). |
+| `skills/` | The eight Agent Skills, one folder each. |
+| `skills/<skill>/SKILL.md` | Skill triggers, workflow, guardrails, and concise fallback behavior. |
+| `skills/<skill>/reference/` | Detailed tool contracts and framework patterns, loaded on demand. |
+| `skills/<skill>/metadata.json` | Skill version and content hash. |
+| `.claude-plugin/` | Claude Code plugin and marketplace manifests. |
+| `.codex-plugin/` | Codex plugin manifest. |
 
 ## Contributing
 
-Issues and pull requests are welcome — improvements to workflows, reference contracts, and coverage of additional Rider languages and UE frameworks.
+The `Validate` workflow checks skill frontmatter against the Agent Skills specification, validates plugin manifests and their shared name/version, checks local Markdown/reference links, and verifies each skill's `metadata.json`. After changing a skill, raise its version and update its hash with:
 
-The `Validate` workflow checks every pull request: skill frontmatter against the Agent Skills specification, the plugin manifests, local Markdown links, and each skill's `metadata.json`. When you change a skill, raise its `version` and set the `hash` that `python3 .github/scripts/check_skill_metadata.py` prints.
+```bash
+python3 .github/scripts/check_skill_metadata.py
+```
 
 ## License
 

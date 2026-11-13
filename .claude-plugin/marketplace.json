@@ -1,17 +1,17 @@
 {
-  "name": "rider-skills",
-  "description": "JetBrains Rider skills that give coding agents IDE-grade code intelligence through the Rider MCP server.",
+  "name": "webstorm-skills",
+  "description": "JetBrains WebStorm skills for JavaScript and TypeScript projects.",
   "owner": {
-    "name": "JetBrains"
+    "name": "jonelleamio"
   },
   "plugins": [
     {
-      "name": "rider-skills",
+      "name": "webstorm-skills",
       "version": "0.1.0",
       "source": "./",
-      "description": "Rider semantic refactoring, debugger-driven analysis, C# test discovery, and Unreal Engine C++ skills.",
+      "description": "WebStorm project execution, semantic refactoring, code navigation, runtime debugging, diagnostics, and JavaScript test workflows.",
       "author": {
-        "name": "JetBrains"
+        "name": "jonelleamio"
       }
     }
   ]
